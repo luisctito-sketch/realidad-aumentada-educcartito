@@ -6,6 +6,7 @@
 
   <title>Realidad Aumentada Educcartito STEAMLab</title>
 
+  <!-- Librerías principales -->
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
@@ -16,10 +17,11 @@
       width: 100%;
       min-height: 100%;
       overflow: hidden;
-      background: #000;
       font-family: Arial, Helvetica, sans-serif;
+      background: #000;
     }
 
+    /* Oculta botones VR/AR de A-Frame */
     .a-enter-vr,
     .a-enter-ar,
     .a-enter-vr-button,
@@ -35,8 +37,8 @@
       position: fixed;
       z-index: 9999;
       inset: 0;
-      background: radial-gradient(circle at top, #263cff 0%, #07122d 45%, #000 100%);
-      color: #fff;
+      background: radial-gradient(circle at top, #173b9f 0%, #07122d 45%, #000000 100%);
+      color: white;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -47,16 +49,16 @@
 
     #tarjetaInicio {
       width: min(92vw, 460px);
-      padding: 28px 22px;
-      border-radius: 28px;
-      background: rgba(0, 0, 0, 0.52);
-      box-shadow: 0 12px 34px rgba(0,0,0,0.50);
-      border: 1px solid rgba(255,255,255,0.22);
+      padding: 26px 22px;
+      border-radius: 26px;
+      background: rgba(0, 0, 0, 0.45);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.18);
     }
 
     #tarjetaInicio h1 {
       margin: 0 0 12px 0;
-      font-size: 30px;
+      font-size: 28px;
       line-height: 1.15;
     }
 
@@ -76,7 +78,7 @@
       font-weight: 800;
       font-size: 18px;
       cursor: pointer;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.38);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.35);
     }
 
     #botonSonido {
@@ -105,7 +107,7 @@
       width: min(90vw, 560px);
       padding: 12px 16px;
       border-radius: 18px;
-      background: rgba(0, 0, 0, 0.70);
+      background: rgba(0, 0, 0, 0.68);
       color: #fff;
       font-size: 17px;
       line-height: 1.35;
@@ -116,50 +118,41 @@
 
   <script>
     /*
-      INDEX VERTICAL SEGURO PARA EDUCCARTITO
+      Este index.html aumenta el tamaño del video de Educcartito.
 
-      Archivos necesarios en GitHub:
-      - index.html
-      - targets.mind
-      - educcartito-bailando.mp4
+      Tamaño actual:
+      width="1.85"
+      height="1.04"
 
-      Este archivo muestra el video vertical grande en AR.
-      Si el video no se carga, revisa que se llame exactamente:
-      educcartito-bailando.mp4
+      Es una proporción aproximada 16:9 para video horizontal.
+      Si quieres que se vea todavía más grande, prueba:
+      width="2.10"
+      height="1.18"
+
+      Si se sale demasiado de la tarjeta, prueba:
+      width="1.60"
+      height="0.90"
     */
 
-    AFRAME.registerComponent("control-video-vertical-educcartito", {
+    AFRAME.registerComponent("control-video-educcartito", {
       init: function () {
         const video = document.querySelector("#videoEduccartito");
-        const panel = document.querySelector("#panelBlanco");
-        const planoVideo = document.querySelector("#planoVideo");
         const mensaje = document.querySelector("#mensaje");
 
-        const mostrarPanel = () => {
-          panel.setAttribute("visible", "true");
-          planoVideo.setAttribute("visible", "true");
-          planoVideo.setAttribute("material", "shader: flat; src: #videoEduccartito; side: double; transparent: false; opacity: 1;");
-        };
-
         this.el.addEventListener("targetFound", async () => {
-          mostrarPanel();
           mensaje.innerHTML = "¡Educcartito apareció!<br>Baila, aprende y descubre patrones.";
+          video.currentTime = 0;
 
           try {
-            video.currentTime = 0;
-            video.muted = false;
             await video.play();
-            mostrarPanel();
           } catch (error) {
-            mensaje.innerHTML = "Educcartito apareció.<br>Toca “Activar sonido” para verlo bailar.";
+            mensaje.innerHTML = "Educcartito apareció.<br>Toca “Activar sonido” para iniciar el video.";
           }
         });
 
         this.el.addEventListener("targetLost", () => {
           mensaje.innerHTML = "Busca nuevamente la tarjeta de Educcartito.";
           video.pause();
-          panel.setAttribute("visible", "false");
-          planoVideo.setAttribute("visible", "false");
         });
       }
     });
@@ -169,19 +162,7 @@
       const botonIniciar = document.querySelector("#botonIniciar");
       const botonSonido = document.querySelector("#botonSonido");
       const video = document.querySelector("#videoEduccartito");
-      const planoVideo = document.querySelector("#planoVideo");
       const mensaje = document.querySelector("#mensaje");
-
-      const aplicarTextura = () => {
-        planoVideo.setAttribute("material", "shader: flat; src: #videoEduccartito; side: double; transparent: false; opacity: 1;");
-      };
-
-      video.addEventListener("loadeddata", aplicarTextura);
-      video.addEventListener("canplay", aplicarTextura);
-      video.addEventListener("playing", aplicarTextura);
-      video.addEventListener("error", () => {
-        mensaje.innerHTML = "No se encontró o no cargó el video.<br>Revisa que se llame exactamente educcartito-bailando.mp4.";
-      });
 
       botonIniciar.addEventListener("click", async () => {
         pantallaInicio.style.display = "none";
@@ -190,21 +171,18 @@
 
         try {
           video.muted = true;
-          video.load();
           await video.play();
-          aplicarTextura();
           video.pause();
           video.currentTime = 0;
           video.muted = false;
         } catch (error) {
-          console.log("El video se activará al detectar la imagen.");
+          console.log("El video se activará cuando se detecte la imagen.");
         }
       });
 
       botonSonido.addEventListener("click", async () => {
         try {
           video.muted = false;
-          aplicarTextura();
           await video.play();
           mensaje.innerHTML = "Sonido activado.<br>Apunta hacia la tarjeta de Educcartito.";
         } catch (error) {
@@ -212,6 +190,7 @@
         }
       });
 
+      // Refuerzo para ocultar el botón VR si aparece después de cargar A-Frame.
       setTimeout(() => {
         document.querySelectorAll(".a-enter-vr, .a-enter-ar, .a-enter-vr-button, .a-enter-ar-button").forEach(el => {
           el.style.display = "none";
@@ -229,8 +208,12 @@
   <div id="pantallaInicio">
     <div id="tarjetaInicio">
       <h1>Educcartito cobra vida</h1>
-      <p>Experiencia de Realidad Aumentada STEAMLab.</p>
-      <p>Presiona el botón, acepta el permiso de cámara y apunta hacia la tarjeta de Educcartito.</p>
+      <p>
+        Experiencia de Realidad Aumentada STEAMLab.
+      </p>
+      <p>
+        Presiona el botón, acepta el permiso de cámara y apunta hacia la tarjeta de Educcartito.
+      </p>
       <button id="botonIniciar" class="botonPrincipal">Iniciar experiencia AR</button>
     </div>
   </div>
@@ -245,20 +228,19 @@
     mindar-image="imageTargetSrc: ./targets.mind; autoStart: true; uiScanning: yes; uiLoading: yes; uiError: yes;"
     embedded
     color-space="sRGB"
-    renderer="colorManagement: true; physicallyCorrectLights: false; alpha: true; antialias: true;"
+    renderer="colorManagement: true; physicallyCorrectLights: true; alpha: true;"
     vr-mode-ui="enabled: false"
     device-orientation-permission-ui="enabled: false">
 
-    <a-assets timeout="30000">
+    <a-assets>
       <video
         id="videoEduccartito"
+        src="./educcartito-bailando.mp4"
         preload="auto"
         loop
-        muted
         playsinline
-        webkit-playsinline>
-        <source src="./educcartito-bailando.mp4" type="video/mp4">
-        <source src="./Educcartitobailando.mp4" type="video/mp4">
+        webkit-playsinline
+        crossorigin="anonymous">
       </video>
     </a-assets>
 
@@ -269,29 +251,34 @@
 
     <a-entity
       mindar-image-target="targetIndex: 0"
-      control-video-vertical-educcartito>
+      control-video-educcartito>
 
-      <!-- Fondo blanco para que el video vertical se vea con más claridad -->
-      <a-plane
-        id="panelBlanco"
-        position="0 0 0.10"
-        rotation="0 0 0"
-        width="1.42"
-        height="2.52"
-        color="#ffffff"
-        visible="false">
-      </a-plane>
+      <!--
+        VIDEO EN REALIDAD AUMENTADA MÁS GRANDE
 
-      <!-- Video vertical grande, formato 9:16 -->
-      <a-plane
-        id="planoVideo"
-        position="0 0 0.13"
+        Ajustado para video horizontal.
+        Antes se veía pequeño; ahora se aumentó el plano del video.
+
+        Actual:
+        width="1.85"
+        height="1.04"
+
+        Más grande:
+        width="2.10"
+        height="1.18"
+
+        Más pequeño:
+        width="1.60"
+        height="0.90"
+      -->
+      <a-video
+        src="#videoEduccartito"
+        position="0 0 0.12"
         rotation="0 0 0"
-        width="1.35"
-        height="2.40"
-        visible="false"
-        material="shader: flat; src: #videoEduccartito; side: double; transparent: false; opacity: 1;">
-      </a-plane>
+        width="1.85"
+        height="1.04"
+        material="side: double;">
+      </a-video>
 
     </a-entity>
   </a-scene>
