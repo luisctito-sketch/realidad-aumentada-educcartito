@@ -21,10 +21,16 @@
       background: #000;
     }
 
-    /* Oculta el botón VR de A-Frame */
+    /* Oculta botones VR/AR de A-Frame */
     .a-enter-vr,
-    .a-enter-ar {
+    .a-enter-ar,
+    .a-enter-vr-button,
+    .a-enter-ar-button,
+    .a-orientation-modal {
       display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
     }
 
     #pantallaInicio {
@@ -112,16 +118,20 @@
 
   <script>
     /*
-      IMPORTANTE:
-      Este index.html está ajustado para que el video de Educcartito no salga aplastado.
-      La proporción elegida es vertical/casi vertical.
+      Este index.html aumenta el tamaño del video de Educcartito.
 
-      Si todavía quieres hacerlo más grande, cambia estos valores:
-      width="1.05"
-      height="1.55"
+      Tamaño actual:
+      width="1.85"
+      height="1.04"
 
-      Si el video se ve demasiado alto, baja height.
-      Si se ve demasiado angosto, sube width.
+      Es una proporción aproximada 16:9 para video horizontal.
+      Si quieres que se vea todavía más grande, prueba:
+      width="2.10"
+      height="1.18"
+
+      Si se sale demasiado de la tarjeta, prueba:
+      width="1.60"
+      height="0.90"
     */
 
     AFRAME.registerComponent("control-video-educcartito", {
@@ -159,10 +169,6 @@
         botonSonido.style.display = "block";
         mensaje.innerHTML = "Acepta el permiso de cámara y apunta hacia la tarjeta de Educcartito.";
 
-        /*
-          Esta pequeña reproducción inicial desbloquea el video en muchos celulares.
-          Luego se pausa y queda listo para aparecer cuando MindAR detecte la imagen.
-        */
         try {
           video.muted = true;
           await video.play();
@@ -183,6 +189,16 @@
           mensaje.innerHTML = "Toca nuevamente la pantalla o revisa el permiso de sonido del navegador.";
         }
       });
+
+      // Refuerzo para ocultar el botón VR si aparece después de cargar A-Frame.
+      setTimeout(() => {
+        document.querySelectorAll(".a-enter-vr, .a-enter-ar, .a-enter-vr-button, .a-enter-ar-button").forEach(el => {
+          el.style.display = "none";
+          el.style.visibility = "hidden";
+          el.style.opacity = "0";
+          el.style.pointerEvents = "none";
+        });
+      }, 1500);
     });
   </script>
 </head>
@@ -238,25 +254,29 @@
       control-video-educcartito>
 
       <!--
-        VIDEO EN REALIDAD AUMENTADA
+        VIDEO EN REALIDAD AUMENTADA MÁS GRANDE
 
-        Este tamaño evita que Educcartito salga aplastado.
-        Está pensado para un video vertical o casi cuadrado.
+        Ajustado para video horizontal.
+        Antes se veía pequeño; ahora se aumentó el plano del video.
 
-        Para agrandar:
-        width="1.15"
-        height="1.70"
+        Actual:
+        width="1.85"
+        height="1.04"
 
-        Para hacerlo más pequeño:
-        width="0.90"
-        height="1.35"
+        Más grande:
+        width="2.10"
+        height="1.18"
+
+        Más pequeño:
+        width="1.60"
+        height="0.90"
       -->
       <a-video
         src="#videoEduccartito"
-        position="0 0 0.10"
+        position="0 0 0.12"
         rotation="0 0 0"
-        width="1.05"
-        height="1.55"
+        width="1.85"
+        height="1.04"
         material="side: double;">
       </a-video>
 
