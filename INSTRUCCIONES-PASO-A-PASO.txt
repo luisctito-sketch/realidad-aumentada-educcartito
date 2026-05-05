@@ -1,0 +1,62 @@
+CARPETA: realidad-aumentada-educcartito
+
+Esta carpeta ya está preparada para tu experiencia de realidad aumentada de Educcartito STEAMLab.
+
+ARCHIVOS YA PREPARADOS:
+
+1. index.html
+   Es la página web que abre la cámara y muestra el video en realidad aumentada.
+
+2. .nojekyll
+   Es un archivo vacío recomendado para GitHub Pages.
+
+3. marcador-educcartito-steamlab.png
+   Es la tarjeta corregida con la palabra “patrones”.
+
+4. marcador-educcartito-steamlab.jpg
+   Es la misma tarjeta en JPG, útil para imprimir y para generar el archivo targets.mind.
+
+ARCHIVOS QUE DEBES AGREGAR:
+
+1. targets.mind
+   Este archivo se genera en el compilador de imágenes de MindAR usando la tarjeta marcador.
+
+2. educcartito-bailando.mp4
+   Este es tu video de Educcartito bailando. Debe estar en formato MP4 y con ese nombre exacto.
+
+PASO 1: GENERAR EL ARCHIVO targets.mind
+
+- Abre el compilador de imágenes de MindAR.
+- Sube la imagen marcador-educcartito-steamlab.jpg.
+- Presiona Start.
+- Descarga el archivo generado.
+- Cambia el nombre del archivo a targets.mind.
+- Súbelo a esta carpeta.
+
+PASO 2: PREPARAR EL VIDEO
+
+- Toma el video de Educcartito bailando.
+- Guárdalo como MP4.
+- Cambia su nombre a educcartito-bailando.mp4.
+- Súbelo a esta carpeta.
+
+PASO 3: SUBIR A GITHUB
+
+- Crea un repositorio llamado realidad-aumentada-educcartito.
+- Sube todos estos archivos.
+- Activa GitHub Pages desde Settings > Pages.
+- Selecciona Deploy from a branch.
+- Elige main y /root.
+- Guarda y espera unos minutos.
+
+PASO 4: USAR LA EXPERIENCIA
+
+- Abre el enlace de GitHub Pages en el celular.
+- Presiona Iniciar experiencia AR.
+- Permite el uso de la cámara.
+- Apunta hacia la tarjeta de Educcartito.
+- El video aparecerá encima de la tarjeta.
+
+IMPORTANTE:
+
+No cambies la imagen marcador después de generar targets.mind. Si cambias cualquier detalle de la imagen, debes volver a generar targets.mind.

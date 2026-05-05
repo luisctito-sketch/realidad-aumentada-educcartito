@@ -1,0 +1,6 @@
+Faltan estos dos archivos para que la realidad aumentada funcione:
+
+1. targets.mind
+2. educcartito-bailando.mp4
+
+Ambos deben estar en la misma carpeta que index.html.
